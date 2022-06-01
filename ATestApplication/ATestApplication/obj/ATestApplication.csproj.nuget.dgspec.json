@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\source\\repos\\ATestApplication\\ATestApplication\\ATestApplication.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\test1\\adoNet\\ATestApplication\\ATestApplication\\ATestApplication.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\source\\repos\\ATestApplication\\ATestApplication\\ATestApplication.csproj": {
+    "C:\\Users\\Admin\\Desktop\\test1\\adoNet\\ATestApplication\\ATestApplication\\ATestApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\source\\repos\\ATestApplication\\ATestApplication\\ATestApplication.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\test1\\adoNet\\ATestApplication\\ATestApplication\\ATestApplication.csproj",
         "projectName": "ATestApplication",
-        "projectPath": "C:\\Users\\User\\source\\repos\\ATestApplication\\ATestApplication\\ATestApplication.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\source\\repos\\ATestApplication\\ATestApplication\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\test1\\adoNet\\ATestApplication\\ATestApplication\\ATestApplication.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\test1\\adoNet\\ATestApplication\\ATestApplication\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +38,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.Data.SqlClient": {
               "target": "Package",
@@ -69,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -15,7 +15,8 @@ namespace ATestApplication.Services.Customer
 {
     public class ClientService
     {
-        string connectionString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=TestBankDB;Integrated Security=True";
+        string connectionString = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;";
+        // "Server=localhost;Database=master;Trusted_Connection=True;"
 
         public async Task<ClientList> GetAllClients(ClientFilterModel filter)
         {
@@ -32,6 +33,10 @@ namespace ATestApplication.Services.Customer
                     cmd.Parameters.Add("@pageSize", SqlDbType.Int).Value = filter?.PageSize ?? 20;
                     cmd.Parameters.Add("@likeName", SqlDbType.VarChar).Value = filter?.Name ?? "";
                     cmd.Parameters.Add("@likeLastName", SqlDbType.VarChar).Value = filter?.LastName ?? "";
+                    cmd.Parameters.Add("@includePhone", SqlDbType.Bit).Value = filter?.IncludePhone ?? false ? 1 : 0;
+                    cmd.Parameters.Add("@includeEmail", SqlDbType.Bit).Value = filter?.IncludeEmail ?? false ? 1 : 0;
+                    cmd.Parameters.Add("@includeDocument", SqlDbType.Bit).Value = filter?.IncludeDocuments ?? false ? 1 : 0;
+
 
                     con.Open();
                     using (SqlDataReader rdr = await cmd.ExecuteReaderAsync().ConfigureAwait(false))
@@ -42,7 +47,8 @@ namespace ATestApplication.Services.Customer
                                 clientsList.TotalCount = (int)rdr["total_count"];
                             var clientId = (long)rdr["client_id"];
                             var client = clientsList.Items.FirstOrDefault(_ => _.Id == clientId);
-                            if (client == null)
+                            bool newClient = client == null;
+                            if (newClient)
                             {
                                 client = new ClientGetModel();
                                 client.Id = clientId;
@@ -53,82 +59,45 @@ namespace ATestApplication.Services.Customer
                                 client.Emails = new List<EmailGetModel>();
                                 client.Documents = new List<DocumentGetModel>();
                                 client.Phones = new List<PhoneGetModel>();
-                                
-                                if (rdr["email_id"] != DBNull.Value)
-                                {
-                                    EmailGetModel email = new EmailGetModel()
-                                    {
-                                        Id = (long)rdr["email_id"],
-                                        Address = rdr["email_address"].ToString(),
-                                        Domain = rdr["email_domain"] != DBNull.Value ? rdr["email_domain"].ToString() : null
-                                    };
-                                    client.Emails.Add(email);
-                                }
-                                if (rdr["document_id"] != DBNull.Value)
-                                {
-                                    DocumentGetModel document = new DocumentGetModel() 
-                                    {
-                                        Id = (long)rdr["document_id"],
-                                        Number = rdr["document_number"].ToString(),
-                                        GivenBy = rdr["document_given_by"] != DBNull.Value 
-                                            ? rdr["document_given_by"].ToString() 
-                                            : null,
-                                        GivenAt = rdr["document_given_at"] != DBNull.Value 
-                                            ? (DateTime?)rdr.GetFieldValue<DateTime>(rdr.GetOrdinal("document_given_at")) 
-                                            : null
-                                    };
-                                    client.Documents.Add(document);
-                                }
-                                if (rdr["phone_id"] != DBNull.Value)
-                                {
-                                    PhoneGetModel phone = new PhoneGetModel()
-                                    { 
-                                        Id = (long)rdr["phone_id"],
-                                        Number = rdr["phone_number"].ToString()
-                                    };
-                                    client.Phones.Add(phone);
-                                }
-
-                                clientsList.Items.Add(client);
                             }
-                            else
+                            if (rdr["email_id"] != DBNull.Value)
                             {
-                                if (rdr["email_id"] != DBNull.Value)
+                                EmailGetModel email = new EmailGetModel()
                                 {
-                                    if (!client.Emails.Select(_ => _.Id).Contains((long)rdr["email_id"]))
-                                    {
-                                        EmailGetModel email = new EmailGetModel()
-                                        {
-                                            Id = (long)rdr["email_id"],
-                                            Address = rdr["email_address"].ToString()
-                                        };
-                                        client.Emails.Add(email);
-                                    }
-                                }
-                                if (rdr["document_id"] != DBNull.Value)
+                                    Id = (long)rdr["email_id"],
+                                    Address = rdr["email_address"].ToString(),
+                                    Domain = rdr["email_domain"] != DBNull.Value ? rdr["email_domain"].ToString() : null
+                                };
+                                client.Emails.Add(email);
+                            }
+                            if (rdr["document_id"] != DBNull.Value)
+                            {
+                                DocumentGetModel document = new DocumentGetModel() 
                                 {
-                                    if (!client.Documents.Select(_ => _.Id).Contains((long)rdr["document_id"]))
-                                    {
-                                        DocumentGetModel document = new DocumentGetModel()
-                                        {
-                                            Id = (long)rdr["document_id"],
-                                            Number = rdr["document_number"].ToString()
-                                        };
-                                        client.Documents.Add(document);
-                                    }
-                                }
-                                if (rdr["phone_id"] != DBNull.Value)
-                                {
-                                    if (!client.Phones.Select(_ => _.Id).Contains((long)rdr["phone_id"]))
-                                    {
-                                        DocumentGetModel document = new DocumentGetModel()
-                                        {
-                                            Id = (long)rdr["phone_id"],
-                                            Number = rdr["phone_number"].ToString()
-                                        };
-                                        client.Documents.Add(document);
-                                    }
-                                }
+                                    Id = (long)rdr["document_id"],
+                                    Number = rdr["document_number"].ToString(),
+                                    GivenBy = rdr["document_given_by"] != DBNull.Value 
+                                        ? rdr["document_given_by"].ToString() 
+                                        : null,
+                                    GivenAt = rdr["document_given_at"] != DBNull.Value 
+                                        ? (DateTime?)rdr.GetFieldValue<DateTime>(rdr.GetOrdinal("document_given_at")) 
+                                        : null
+                                };
+                                client.Documents.Add(document);
+                            }
+                            if (rdr["phone_id"] != DBNull.Value)
+                            {
+                                PhoneGetModel phone = new PhoneGetModel()
+                                { 
+                                    Id = (long)rdr["phone_id"],
+                                    Number = rdr["phone_number"].ToString()
+                                };
+                                client.Phones.Add(phone);
+                            }
+
+                            if (newClient)
+                            {
+                                clientsList.Items.Add(client);
                             }
                         }
                     }

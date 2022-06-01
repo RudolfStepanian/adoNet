@@ -14,5 +14,11 @@ namespace ATestApplication.BuisenessEntities
         public string Name { get; set; }
 
         public string LastName { get; set; }
+
+        public bool IncludePhone { get; set; }
+
+        public bool IncludeEmail { get; set; }
+
+        public bool IncludeDocuments { get; set; }
     }
 }

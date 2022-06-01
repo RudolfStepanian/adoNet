@@ -26,31 +26,6 @@ namespace ATestApplication
         {
             services.AddControllersWithViews();
             services.AddSwaggerGen();
-            services.AddSwaggerGen(_ =>
-            {
-                _.SwaggerDoc("v1", new OpenApiInfo { Title = "Client API", Version = "v1" });
-                _.AddSecurityDefinition("basic", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "basic",
-                    In = ParameterLocation.Header
-                });
-                _.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                          new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "basic"
-                                }
-                            },
-                            Array.Empty<string>()
-                    }
-                });
-            });
 
         }
 
